@@ -119,9 +119,7 @@ smb: \>
 
 
 
-# Exploring SMB Shares with smbclient
-
-In this post, we'll explore the use of `smbclient` to connect to SMB shares and the resulting interactions with a Windows system.
+use of `smbclient` to connect to SMB shares and the resulting interactions with a Windows system.
 
 ## Connecting to SMB Shares
 
@@ -200,3 +198,76 @@ This command returns an `NT_STATUS_NO_SUCH_FILE` error, indicating that the shar
 
 Throughout this session, we learned that while we could access the `backups` share, other shares like `ADMIN$`, `C$`, and `IPC$` were inaccessible due to permission restrictions. This illustrates the importance of proper credentials and permissions when working with SMB shares.
 ```
+
+
+
+
+
+
+
+
+
+
+```bash                                                                                                                                 
+┌──(root㉿kali)-[~]
+└─# ls
+prod.dtsConfig
+                                                                                                                                 
+┌──(root㉿kali)-[~]
+└─# cat prod.dtsConfig 
+<DTSConfiguration>
+    <DTSConfigurationHeading>
+        <DTSConfigurationFileInfo GeneratedBy="..." GeneratedFromPackageName="..." GeneratedFromPackageID="..." GeneratedDate="20.1.2019 10:01:34"/>
+    </DTSConfigurationHeading>
+    <Configuration ConfiguredType="Property" Path="\Package.Connections[Destination].Properties[ConnectionString]" ValueType="String">
+        <ConfiguredValue>Data Source=.;Password=M3g4c0rp123;User ID=ARCHETYPE\sql_svc;Initial Catalog=Catalog;Provider=SQLNCLI10.1;Persist Security Info=True;Auto Translate=False;</ConfiguredValue>
+    </Configuration>
+</DTSConfiguration>                                                                                                                                 
+```
+
+
+
+
+
+──(root㉿kali)-[~]
+└─# cat prod.dtsConfig 
+<DTSConfiguration>
+    <DTSConfigurationHeading>
+        <DTSConfigurationFileInfo GeneratedBy="..." GeneratedFromPackageName="..." GeneratedFromPackageID="..." GeneratedDate="20.1.2019 10:01:34"/>
+    </DTSConfigurationHeading>
+    <Configuration ConfiguredType="Property" Path="\Package.Connections[Destination].Properties[ConnectionString]" ValueType="String">
+        <ConfiguredValue>Data Source=.;Password=M3g4c0rp123;User ID=ARCHETYPE\sql_svc;Initial Catalog=Catalog;Provider=SQLNCLI10.1;Persist Security Info=True;Auto Translate=False;</ConfiguredValue>
+    </Configuration>
+</DTSConfiguration>                                                                                                                                 
+┌──(root㉿kali)-[~]
+└─# git clone https://github.com/fortra/impacket.git
+Cloning into 'impacket'...
+remote: Enumerating objects: 24216, done.
+remote: Counting objects: 100% (4609/4609), done.
+remote: Compressing objects: 100% (351/351), done.
+remote: Total 24216 (delta 4421), reused 4258 (delta 4258), pack-reused 19607 (from 1)
+Receiving objects: 100% (24216/24216), 9.43 MiB | 1.66 MiB/s, done.
+Resolving deltas: 100% (18638/18638), done.
+                                                                                                                                 
+┌──(root㉿kali)-[~]
+└─# alias py=python   
+                                                                                                                                 
+┌──(root㉿kali)-[~]
+└─# cd impacket/examples 
+                                                                                                                                 
+┌──(root㉿kali)-[~/impacket/examples]
+└─# ls
+addcomputer.py     exchanger.py        getST.py          mimikatz.py       ping6.py          rpcmap.py       sniff.py
+atexec.py          findDelegation.py   getTGT.py         mqtt_check.py     ping.py           sambaPipe.py    split.py
+changepasswd.py    GetADComputers.py   GetUserSPNs.py    mssqlclient.py    psexec.py         samrdump.py     ticketConverter.py
+dacledit.py        GetADUsers.py       goldenPac.py      mssqlinstance.py  raiseChild.py     secretsdump.py  ticketer.py
+dcomexec.py        getArch.py          karmaSMB.py       net.py            rbcd.py           services.py     tstool.py
+describeTicket.py  Get-GPPPassword.py  keylistattack.py  netview.py        rdp_check.py      smbclient.py    wmiexec.py
+dpapi.py           GetLAPSPassword.py  kintercept.py     ntfs-read.py      registry-read.py  smbexec.py      wmipersist.py
+DumpNTLMInfo.py    GetNPUsers.py       lookupsid.py      ntlmrelayx.py     reg.py            smbserver.py    wmiquery.py
+esentutl.py        getPac.py           machine_role.py   owneredit.py      rpcdump.py        sniffer.py
+                                                                                                                                 
+┌──(root㉿kali)-[~/impacket/examples]
+└─# py mssqlclient.py ARCHETYPE/sql_svc@$ip -windows-auth
+Impacket v0.12.0.dev1 - Copyright 2023 Fortra
+

